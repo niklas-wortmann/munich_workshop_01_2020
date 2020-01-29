@@ -15,6 +15,6 @@ export class SearchComponent implements OnInit {
   ngOnInit() {
     this.search.valueChanges.subscribe(value => {
       this.value.emit(value);
-    })
+    });
   }
 }

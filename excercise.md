@@ -45,3 +45,16 @@ test = new FormControl();
 ```ts
 this.test.valueChanges.subscribe(...)
 ```
+
+## Excercise 04
+
+1. Neuen Stream erzeugen vom Output Value
+
+2. Mit jedem Event liste nach Übereinstimmungen filtern
+
+3. Gefilterte Liste anzeigen
+
+HINT:
+
+- `map`
+- `switchMap`

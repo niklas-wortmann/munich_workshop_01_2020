@@ -1,7 +1,13 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { BooksService, Book } from "../books.service";
-import { Observable, Subscription, Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import {
+  Observable,
+  Subscription,
+  Subject,
+  combineLatest,
+  BehaviorSubject
+} from "rxjs";
+import { takeUntil, tap } from "rxjs/operators";
 
 @Component({
   selector: "app-books-list",
@@ -10,22 +16,28 @@ import { takeUntil } from "rxjs/operators";
 })
 export class BooksListComponent implements OnInit, OnDestroy {
   books: Book[];
-  sub: Subscription;
   destroy$ = new Subject<void>();
+  keyStroke$ = new BehaviorSubject<string>(null);
   constructor(private bookService: BooksService) {}
 
   ngOnInit() {
-    this.sub = this.bookService
-      .fetchData()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(data => (this.books = data));
+    combineLatest([this.bookService.fetchData(), this.keyStroke$])
+      .pipe(
+        tap(([data, keys]) =>
+          keys == null
+            ? (this.books = data)
+            : (this.books = data.filter(book => book.title.includes(keys)))
+        ),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
   }
 
-  onValue(value): void {
-    console.log({ value });
+  onValue(value: string): void {
+    this.keyStroke$.next(value);
   }
 }
