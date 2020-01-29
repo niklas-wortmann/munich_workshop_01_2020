@@ -18,3 +18,13 @@ ng new ...
 
 HINT:
 GET http://localhost:4730/books
+
+## Excercise 02
+
+1.  Erzeuge eine neue Komponente `BooksListComponent`
+
+```sh
+ng generate component books-list
+```
+
+2.  Render die Liste an Büchern in der Komponente

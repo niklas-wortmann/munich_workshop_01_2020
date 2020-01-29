@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject, Observable } from "rxjs";
 import { tap } from "rxjs/operators";
 
-interface Book {
+export interface Book {
   title: string;
 }
 
