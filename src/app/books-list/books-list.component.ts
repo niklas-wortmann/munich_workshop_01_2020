@@ -6,9 +6,20 @@ import {
   Subject,
   combineLatest,
   BehaviorSubject,
-  merge
+  merge,
+  EMPTY,
+  of
 } from "rxjs";
-import { takeUntil, tap, switchMap, map, filter } from "rxjs/operators";
+import {
+  takeUntil,
+  tap,
+  switchMap,
+  map,
+  filter,
+  finalize,
+  catchError,
+  exhaustMap
+} from "rxjs/operators";
 
 @Component({
   selector: "app-books-list",
@@ -18,16 +29,28 @@ import { takeUntil, tap, switchMap, map, filter } from "rxjs/operators";
 export class BooksListComponent implements OnInit {
   book$: Observable<Book[]>;
   keyStroke$ = new BehaviorSubject<string>(null);
+  refresh = new BehaviorSubject<void>(null);
+
   constructor(private bookService: BooksService) {}
 
   ngOnInit() {
+    this.refresh.pipe(
+      exhaustMap(() =>
+        this.bookService.fetchData().pipe(
+          catchError(_ => {
+            console.error(`error ${_} happened`);
+            return EMPTY;
+          })
+        )
+      )
+    );
     this.book$ = merge(
-      this.bookService.fetchData(),
       this.keyStroke$.pipe(
         switchMap(keyStroke =>
           this.bookService.books$.pipe(
             filter(books => books != null),
-            map(books => books.filter(book => book.title.includes(keyStroke)))
+            map(books => books.filter(book => book.title.includes(keyStroke))),
+            catchError(_ => of([]))
           )
         )
       )
@@ -36,5 +59,9 @@ export class BooksListComponent implements OnInit {
 
   onValue(value: string): void {
     this.keyStroke$.next(value);
+  }
+
+  onRefresh(): void {
+    this.refresh.next();
   }
 }

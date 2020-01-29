@@ -58,3 +58,16 @@ HINT:
 
 - `map`
 - `switchMap`
+
+## Excercise 05
+
+1. Zeige einen Button in der `BooksListComponent` an
+
+```html
+<button (click)="onRefresh()">REFRESH</button>
+```
+
+2. jedes mal wenn dieser Button geklickt wird, wird ein HTTP Request abgesetzt und die gecachte Bücherliste aktualisiert
+3. Füge Fehlerbehandlung hinzu, wo sinnvoll!
+
+HINT: `catchError`

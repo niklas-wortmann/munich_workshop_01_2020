@@ -1,4 +1,5 @@
 <app-search (value)="onValue($event)"></app-search>
+<button (click)="onRefresh()">Refresh</button>
 <ul>
   <li *ngFor="let book of book$ | async">{{ book.title }}</li>
 </ul>
