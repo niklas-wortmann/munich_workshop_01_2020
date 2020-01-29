@@ -24,4 +24,8 @@ export class BooksListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
   }
+
+  onValue(value): void {
+    console.log({ value });
+  }
 }

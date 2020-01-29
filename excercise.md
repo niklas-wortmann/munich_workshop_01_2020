@@ -28,3 +28,20 @@ ng generate component books-list
 ```
 
 2.  Render die Liste an Büchern in der Komponente
+
+## Excercise 03
+
+1. Generiere eine neue Komponente: SearchComponent
+
+2. Implementiere ein FormControl
+
+```ts
+test = new FormControl();
+```
+
+3. Nimm das `valueChanges` observable entgegen und verwende den
+   `@Output` decorator um jede Wertänderung an die ParentComponent zu propagieren
+
+```ts
+this.test.valueChanges.subscribe(...)
+```
