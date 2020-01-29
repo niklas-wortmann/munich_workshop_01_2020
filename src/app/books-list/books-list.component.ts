@@ -5,36 +5,33 @@ import {
   Subscription,
   Subject,
   combineLatest,
-  BehaviorSubject
+  BehaviorSubject,
+  merge
 } from "rxjs";
-import { takeUntil, tap } from "rxjs/operators";
+import { takeUntil, tap, switchMap, map, filter } from "rxjs/operators";
 
 @Component({
   selector: "app-books-list",
   templateUrl: "./books-list.component.html",
   styleUrls: ["./books-list.component.scss"]
 })
-export class BooksListComponent implements OnInit, OnDestroy {
-  books: Book[];
-  destroy$ = new Subject<void>();
+export class BooksListComponent implements OnInit {
+  book$: Observable<Book[]>;
   keyStroke$ = new BehaviorSubject<string>(null);
   constructor(private bookService: BooksService) {}
 
   ngOnInit() {
-    combineLatest([this.bookService.fetchData(), this.keyStroke$])
-      .pipe(
-        tap(([data, keys]) =>
-          keys == null
-            ? (this.books = data)
-            : (this.books = data.filter(book => book.title.includes(keys)))
-        ),
-        takeUntil(this.destroy$)
+    this.book$ = merge(
+      this.bookService.fetchData(),
+      this.keyStroke$.pipe(
+        switchMap(keyStroke =>
+          this.bookService.books$.pipe(
+            filter(books => books != null),
+            map(books => books.filter(book => book.title.includes(keyStroke)))
+          )
+        )
       )
-      .subscribe();
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
+    );
   }
 
   onValue(value: string): void {
