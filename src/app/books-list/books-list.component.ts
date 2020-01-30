@@ -34,25 +34,32 @@ export class BooksListComponent implements OnInit {
   constructor(private bookService: BooksService) {}
 
   ngOnInit() {
-    this.refresh.pipe(
-      exhaustMap(() =>
-        this.bookService.fetchData().pipe(
-          catchError(_ => {
-            console.error(`error ${_} happened`);
-            return EMPTY;
-          })
-        )
+    this.refresh
+      .pipe(
+        exhaustMap(() => {
+          return this.bookService.fetchData().pipe(
+            catchError(_ => {
+              console.error(`error ${_} happened`);
+              return EMPTY;
+            })
+          );
+        })
       )
-    );
+      .subscribe();
     this.book$ = merge(
       this.keyStroke$.pipe(
-        switchMap(keyStroke =>
-          this.bookService.books$.pipe(
+        switchMap(keyStroke => {
+          console.log("blasodja");
+          return this.bookService.books$.pipe(
             filter(books => books != null),
-            map(books => books.filter(book => book.title.includes(keyStroke))),
+            map(books =>
+              keyStroke == null
+                ? books
+                : books.filter(book => book.title.includes(keyStroke))
+            ),
             catchError(_ => of([]))
-          )
-        )
+          );
+        })
       )
     );
   }

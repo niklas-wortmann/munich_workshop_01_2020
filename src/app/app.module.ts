@@ -9,6 +9,8 @@ import { SearchComponent } from "./search/search.component";
 import { ReactiveFormsModule } from "@angular/forms";
 import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from './reducers';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [AppComponent, BooksListComponent, SearchComponent],
@@ -23,7 +25,8 @@ import { reducers, metaReducers } from './reducers';
         strictStateImmutability: true,
         strictActionImmutability: true
       }
-    })
+    }),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]

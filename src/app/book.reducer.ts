@@ -1,33 +1,30 @@
 import { Action, createReducer, on } from "@ngrx/store";
-import { Book } from "./books.service";
 import {
   loadInitBooks,
   loadInitBooksSuccess,
   loadInitBooksFailure
 } from "./init-books.actions";
+import { Book } from "./books.service";
+import { State } from "./reducers";
 
-export const bookFeatureKey = "book";
+export const bookFeatureKey = "books";
 
-export interface State {
-  books: Book[];
+export interface BookState {
+  list: Book[];
 }
 
-export const initialState: State = {
-  books: []
+export const initialState: BookState = {
+  list: []
 };
 
-const handleBookSuccess = (state: State, obj: { books: Book[] }) => ({
+const handleBookSuccess = (state: BookState, { books }): BookState => ({
   ...state,
-  books: [...obj.books]
+  list: [...books]
 });
 
-const bookReducer = createReducer(
+export const bookReducer = createReducer(
   initialState,
   on(loadInitBooks, state => ({ ...state, books: [] })),
   on(loadInitBooksSuccess, handleBookSuccess),
   on(loadInitBooksFailure, state => ({ ...state, books: [] }))
 );
-
-export function reducer(state: State | undefined, action: Action) {
-  return bookReducer;
-}

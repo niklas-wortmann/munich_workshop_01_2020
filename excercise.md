@@ -91,3 +91,9 @@ HINT:
 - https://ngrx.io/guide/store/install
 - https://ngrx.io/guide/store/actions
 - https://ngrx.io/guide/store/reducers
+
+## Excercise 07
+
+1. Löse das Service with a Subject Pattern durch eine NgRx Facade ab
+   1. Dispatche die richtigen Actions an den notwendigen Stellen
+   2. Implementiere ein `store.select` anstatt des Subjects
