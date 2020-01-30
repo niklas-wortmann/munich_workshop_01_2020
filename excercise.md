@@ -71,3 +71,23 @@ HINT:
 3. Füge Fehlerbehandlung hinzu, wo sinnvoll!
 
 HINT: `catchError`
+
+## Excercise 06
+
+1. @ngrx/store zum Projekt hinzufügen
+
+```sh
+npm install @ngrx/store --save
+ng add @ngrx/store
+ng add @ngrx/schematics
+```
+
+2. Den State an sich initialisieren (Anfangszustand)
+
+3. Einen Action und einen Reducer um Liste im Store zu speichern!
+
+HINT:
+
+- https://ngrx.io/guide/store/install
+- https://ngrx.io/guide/store/actions
+- https://ngrx.io/guide/store/reducers
